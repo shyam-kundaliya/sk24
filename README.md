@@ -1,2 +1,2 @@
 # sk24
-my hand watch project
+my hand watch project.

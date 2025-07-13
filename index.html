@@ -1,1 +1,1218 @@
-<p>hello world.</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regal Time - Timeless Elegance</title>
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Playfair Display', Georgia, serif;
+        }
+
+        body {
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+            overflow-x: hidden;
+        }
+
+        /* Drawer Menu */
+        .drawer {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 300px;
+            height: 100%;
+            background-color: #1a1a1a;
+            color: #fff;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            padding: 20px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+        }
+
+        .drawer.open {
+            left: 0;
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #444;
+            margin-bottom: 20px;
+        }
+
+        .drawer-title {
+            font-size: 1.5rem;
+            color: #d4af37;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .drawer-nav ul {
+            list-style: none;
+        }
+
+        .drawer-nav li {
+            margin-bottom: 15px;
+        }
+
+        .drawer-nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+            display: block;
+            padding: 8px 0;
+        }
+
+        .drawer-nav a:hover {
+            color: #d4af37;
+        }
+
+        .sub-category {
+            padding-left: 20px;
+            margin-top: 5px;
+            border-left: 2px solid #444;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .sub-category.active {
+            max-height: 500px;
+        }
+
+        .sub-category li {
+            margin-bottom: 8px;
+        }
+
+        .has-submenu {
+            position: relative;
+        }
+
+        .has-submenu::after {
+            content: '+';
+            position: absolute;
+            right: 0;
+            transition: transform 0.3s;
+        }
+
+        .has-submenu.active::after {
+            content: '-';
+        }
+
+        /* Menu Button */
+        .menu-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: none;
+            border: none;
+            color: #333;
+            font-size: 1.8rem;
+            cursor: pointer;
+            z-index: 100;
+        }
+
+        /* Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 2rem 0;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #1a1a1a;
+            margin-bottom: 0.5rem;
+            letter-spacing: 2px;
+        }
+
+        .tagline {
+            font-style: italic;
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .quote {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1rem;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 0 2rem;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease;
+        }
+
+        .hero-content.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            max-width: 700px;
+            line-height: 1.8;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .cta-button {
+            background-color: #d4af37;
+            color: #1a1a1a;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            letter-spacing: 1px;
+        }
+
+        .cta-button:hover {
+            background-color: #c9a227;
+            transform: translateY(-2px);
+        }
+
+        /* Collections Section */
+        .collections {
+            padding: 4rem 5%;
+            background-color: #fff;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 3rem;
+            color: #1a1a1a;
+            position: relative;
+        }
+
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 3px;
+            background-color: #d4af37;
+            margin: 0.5rem auto 0;
+        }
+
+        .collections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .collection-card {
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .collection-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .collection-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .collection-info {
+            padding: 1.5rem;
+        }
+
+        .collection-name {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+        }
+
+        .collection-description {
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .view-collection {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: #1a1a1a;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .view-collection:hover {
+            background-color: #d4af37;
+            color: #1a1a1a;
+        }
+
+        /* Products Section */
+        .products {
+            padding: 4rem 5%;
+            background-color: #f5f5f5;
+        }
+
+        .filter-options {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-options select {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #fff;
+            font-size: 1rem;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .product-card h3 {
+            padding: 0.5rem 1rem;
+            font-size: 1.1rem;
+        }
+
+        .product-card .price {
+            padding: 0 1rem 0.5rem;
+            font-weight: bold;
+            color: #d4af37;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 0.5rem;
+            background-color: #1a1a1a;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .add-to-cart:hover {
+            background-color: #d4af37;
+            color: #1a1a1a;
+        }
+
+        /* Brands Page */
+        .brands-page {
+            padding: 4rem 5%;
+            background-color: #fff;
+            display: none;
+        }
+
+        .brands-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .brand-card {
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .brand-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .brand-logo {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin: 0 auto 1rem;
+        }
+
+        /* Contact Page */
+        .contact-page {
+            padding: 4rem 5%;
+            background-color: #fff;
+            display: none;
+        }
+
+        .contact-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .contact-info {
+            background-color: #f5f5f5;
+            padding: 2rem;
+            border-radius: 8px;
+        }
+
+        .contact-card {
+            margin-bottom: 2rem;
+        }
+
+        .contact-card h3 {
+            color: #d4af37;
+            margin-bottom: 1rem;
+        }
+
+        .contact-form {
+            background-color: #f5f5f5;
+            padding: 2rem;
+            border-radius: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            height: 150px;
+        }
+
+        .submit-btn {
+            background-color: #1a1a1a;
+            color: white;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: #d4af37;
+        }
+
+        /* Policies Pages */
+        .policy-page {
+            padding: 4rem 5%;
+            background-color: #fff;
+            max-width: 1000px;
+            margin: 0 auto;
+            display: none;
+        }
+
+        .policy-page h2 {
+            color: #d4af37;
+            margin-bottom: 1.5rem;
+        }
+
+        .policy-page h3 {
+            margin: 2rem 0 1rem;
+            color: #1a1a1a;
+        }
+
+        .policy-page p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .policy-page ul {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+
+        .policy-page li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* FAQ Page */
+        .faq-page {
+            padding: 4rem 5%;
+            background-color: #fff;
+            max-width: 1000px;
+            margin: 0 auto;
+            display: none;
+        }
+
+        .faq-item {
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 1rem;
+        }
+
+        .faq-question {
+            color: #d4af37;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            position: relative;
+            padding-right: 30px;
+        }
+
+        .faq-question::after {
+            content: '+';
+            position: absolute;
+            right: 0;
+            transition: transform 0.3s;
+        }
+
+        .faq-question.active::after {
+            content: '-';
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .faq-answer.active {
+            max-height: 500px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #1a1a1a;
+            color: #ddd;
+            padding: 3rem 5% 1rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            color: #d4af37;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section ul li a {
+            color: #aaa;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section ul li a:hover {
+            color: #d4af37;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-icons img {
+            width: 30px;
+            height: 30px;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 1rem;
+            border-top: 1px solid #444;
+            color: #888;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .collections-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-options {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .brands-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+
+        /* Animation for hero text */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-text-animate {
+            animation: fadeInUp 1s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <!-- Drawer Menu -->
+    <button class="menu-btn">☰</button>
+    
+    <div class="drawer">
+        <div class="drawer-header">
+            <div class="drawer-title">Regal Time</div>
+            <button class="close-btn">×</button>
+        </div>
+        <nav class="drawer-nav">
+            <ul>
+                <li><a href="#" class="nav-link" data-page="home">Home</a></li>
+                <li class="has-submenu">
+                    <a href="#" class="nav-link" data-page="categories">Categories</a>
+                    <ul class="sub-category">
+                        <li><a href="#" class="nav-link" data-page="men">Men</a></li>
+                        <li><a href="#" class="nav-link" data-page="women">Women</a></li>
+                        <li><a href="#" class="nav-link" data-page="children">Children</a></li>
+                    </ul>
+                </li>
+                <li class="has-submenu">
+                    <a href="#" class="nav-link" data-page="brands">Brands</a>
+                    <ul class="sub-category">
+                        <li><a href="#" class="nav-link" data-page="rolex">Rolex</a></li>
+                        <li><a href="#" class="nav-link" data-page="omega">Omega</a></li>
+                        <li><a href="#" class="nav-link" data-page="patek">Patek Philippe</a></li>
+                        <li><a href="#" class="nav-link" data-page="audemars">Audemars Piguet</a></li>
+                        <li><a href="#" class="nav-link" data-page="cartier">Cartier</a></li>
+                        <li><a href="#" class="nav-link" data-page="tagheuer">Tag Heuer</a></li>
+                        <li><a href="#" class="nav-link" data-page="breitling">Breitling</a></li>
+                        <li><a href="#" class="nav-link" data-page="iwc">IWC</a></li>
+                        <li><a href="#" class="nav-link" data-page="jaeger">Jaeger-LeCoultre</a></li>
+                        <li><a href="#" class="nav-link" data-page="panerai">Panerai</a></li>
+                        <li><a href="#" class="nav-link" data-page="hublot">Hublot</a></li>
+                        <li><a href="#" class="nav-link" data-page="vacheron">Vacheron Constantin</a></li>
+                        <li><a href="#" class="nav-link" data-page="breguet">Breguet</a></li>
+                        <li><a href="#" class="nav-link" data-page="zenith">Zenith</a></li>
+                        <li><a href="#" class="nav-link" data-page="tudor">Tudor</a></li>
+                    </ul>
+                </li>
+                <li><a href="#" class="nav-link" data-page="cart">Cart (<span id="cart-count">0</span>)</a></li>
+                <li><a href="#" class="nav-link" data-page="contact">Contact</a></li>
+                <li><a href="#" class="nav-link" data-page="about">About Us</a></li>
+                <li><a href="#" class="nav-link" data-page="shipping">Shipping Policy</a></li>
+                <li><a href="#" class="nav-link" data-page="returns">Return Policy</a></li>
+                <li><a href="#" class="nav-link" data-page="faq">FAQ</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="overlay"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">Regal Time</div>
+        <div class="tagline">"Where Every Second is a Masterpiece"</div>
+        <div class="quote">
+            "At Regal Time, we don't just measure time - we celebrate it. Our watches are more than instruments; 
+            they're heirlooms in the making, designed for those who understand that true elegance is timeless. 
+            Each piece in our collection is crafted with precision and passion, embodying the perfect balance 
+            between heritage and innovation."
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-text-animate" style="animation-delay: 0.3s;">Timeless Elegance, Modern Design</h1>
+            <p class="hero-text-animate" style="animation-delay: 0.6s;">Discover our premium collection of handcrafted watches that blend precision engineering with exquisite craftsmanship to create timepieces that transcend generations.</p>
+            <a href="#" class="cta-button nav-link hero-text-animate" data-page="categories" style="animation-delay: 0.9s;">Explore Collections</a>
+        </div>
+    </section>
+
+    <!-- Collections Section -->
+    <section class="collections">
+        <h2 class="section-title">Our Collections</h2>
+        <div class="collections-grid">
+            <div class="collection-card">
+                <img src="https://images.unsplash.com/photo-1524805444758-089113d48a6d?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="Luxury Collection" class="collection-img">
+                <div class="collection-info">
+                    <h3 class="collection-name">Luxury Collection</h3>
+                    <p class="collection-description">
+                        Our luxury watches are crafted with the finest materials, featuring Swiss movements and 
+                        hand-finished details. Each piece is a statement of sophistication and prestige, designed 
+                        for those who demand excellence in every second.
+                    </p>
+                    <a href="#" class="view-collection nav-link" data-page="luxury">View Collection</a>
+                </div>
+            </div>
+            <div class="collection-card">
+                <img src="https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Sport Collection" class="collection-img">
+                <div class="collection-info">
+                    <h3 class="collection-name">Sport Collection</h3>
+                    <p class="collection-description">
+                        Built for adventure and performance, our sport watches combine rugged durability with 
+                        precision timing. Water-resistant, shockproof, and featuring advanced chronograph 
+                        functions, these timepieces are ready for any challenge.
+                    </p>
+                    <a href="#" class="view-collection nav-link" data-page="sport">View Collection</a>
+                </div>
+            </div>
+            <div class="collection-card">
+                <img src="https://images.unsplash.com/photo-1558433916-90a36b44753f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Smart Collection" class="collection-img">
+                <div class="collection-info">
+                    <h3 class="collection-name">Smart Collection</h3>
+                    <p class="collection-description">
+                        The perfect fusion of technology and style, our smart watches keep you connected while 
+                        maintaining the elegance of traditional watchmaking. With health tracking, notifications, 
+                        and customizable faces, they're designed for the modern lifestyle.
+                    </p>
+                    <a href="#" class="view-collection nav-link" data-page="smart">View Collection</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products">
+        <h2 class="section-title">Featured Timepieces</h2>
+        <div class="filter-options">
+            <select id="price-filter">
+                <option value="all">All Prices</option>
+                <option value="0-100">Under $100</option>
+                <option value="100-500">$100 - $500</option>
+                <option value="500-1000">$500 - $1000</option>
+                <option value="1000+">Over $1000</option>
+            </select>
+            <select id="sort-by">
+                <option value="featured">Featured</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+                <option value="best">Best Selling</option>
+            </select>
+        </div>
+        <div class="products-grid">
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1539874754764-5a96559165b0?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="Royal Chronograph">
+                <h3>Royal Chronograph</h3>
+                <p class="price">$1,249.99</p>
+                <button class="add-to-cart">Add to Cart</button>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?ixlib=rb-1.2.1&auto=format&fit=crop&w=700&q=80" alt="Aviator Pro">
+                <h3>Aviator Pro</h3>
+                <p class="price">$899.99</p>
+                <button class="add-to-cart">Add to Cart</button>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1523170335258-f5ed11844a49?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Heritage Gold">
+                <h3>Heritage Gold</h3>
+                <p class="price">$2,499.99</p>
+                <button class="add-to-cart">Add to Cart</button>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1557531365-e8b22d93dbd0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Diver X">
+                <h3>Diver X</h3>
+                <p class="price">$749.99</p>
+                <button class="add-to-cart">Add to Cart</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Brands Page -->
+    <section class="brands-page">
+        <h2 class="section-title">Our Luxury Brands</h2>
+        <div class="brands-grid">
+            <div class="brand-card">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Rolex_logo.svg/1200px-Rolex_logo.svg.png" alt="Rolex" class="brand-logo">
+                <h3>Rolex</h3>
+            </div>
+            <div class="brand-card">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Omega_logo.svg/1200px-Omega_logo.svg.png" alt="Omega" class="brand-logo">
+                <h3>Omega</h3>
+            </div>
+            <div class="brand-card">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Patek_Philippe_logo.svg/1200px-Patek_Philippe_logo.svg.png" alt="Patek Philippe" class="brand-logo">
+                <h3>Patek Philippe</h3>
+            </div>
+            <div class="brand-card">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Audemars_Piguet_Logo.svg/1200px-Audemars_Piguet_Logo.svg.png" alt="Audemars Piguet" class="brand-logo">
+                <h3>Audemars Piguet</h3>
+            </div>
+            <div class="brand-card">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Cartier_logo.svg/1200px-Cartier_logo.svg.png" alt="Cartier" class="brand-logo">
+                <h3>Cartier</h3>
+            </div>
+            <div class="brand-card">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/TAG_Heuer_Logo.svg/1200px-TAG_Heuer_Logo.svg.png" alt="Tag Heuer" class="brand-logo">
+                <h3>Tag Heuer</h3>
+            </div>
+            <div class="brand-card">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Breitling_logo.svg/1200px-Breitling_logo.svg.png" alt="Breitling" class="brand-logo">
+                <h3>Breitling</h3>
+            </div>
+            <div class="brand-card">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/IWC_logo.svg/1200px-IWC_logo.svg.png" alt="IWC" class="brand-logo">
+                <h3>IWC</h3>
+            </div>
+            <div class="brand-card">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Jaeger-LeCoultre_logo.svg/1200px-Jaeger-LeCoultre_logo.svg.png" alt="Jaeger-LeCoultre" class="brand-logo">
+                <h3>Jaeger-LeCoultre</h3>
+            </div>
+            <div class="brand-card">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Panerai_logo.svg/1200px-Panerai_logo.svg.png" alt="Panerai" class="brand-logo">
+                <h3>Panerai</h3>
+            </div>
+            <div class="brand-card">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Hublot_logo.svg/1200px-Hublot_logo.svg.png" alt="Hublot" class="brand-logo">
+                <h3>Hublot</h3>
+            </div>
+            <div class="brand-card">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Vacheron_Constantin_logo.svg/1200px-Vacheron_Constantin_logo.svg.png" alt="Vacheron Constantin" class="brand-logo">
+                <h3>Vacheron Constantin</h3>
+            </div>
+            <div class="brand-card">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Breguet_logo.svg/1200px-Breguet_logo.svg.png" alt="Breguet" class="brand-logo">
+                <h3>Breguet</h3>
+            </div>
+            <div class="brand-card">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Zenith_logo.svg/1200px-Zenith_logo.svg.png" alt="Zenith" class="brand-logo">
+                <h3>Zenith</h3>
+            </div>
+            <div class="brand-card">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Tudor_logo.svg/1200px-Tudor_logo.svg.png" alt="Tudor" class="brand-logo">
+                <h3>Tudor</h3>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Page -->
+    <section class="contact-page">
+        <h2 class="section-title">Contact Us</h2>
+        <div class="contact-container">
+            <div class="contact-info">
+                <div class="contact-card">
+                    <h3>Customer Service</h3>
+                    <p>Email: service@regaltime.com</p>
+                    <p>Phone: +1 (800) 555-0199</p>
+                    <p>Hours: Mon-Fri 9am-6pm EST</p>
+                </div>
+                <div class="contact-card">
+                    <h3>Corporate Headquarters</h3>
+                    <p>123 Horology Avenue</p>
+                    <p>Geneva, Switzerland 1201</p>
+                    <p>Phone: +41 22 555 0199</p>
+                </div>
+                <div class="contact-card">
+                    <h3>Press Inquiries</h3>
+                    <p>Email: press@regaltime.com</p>
+                    <p>Phone: +1 (212) 555-0199</p>
+                </div>
+                <div class="contact-card">
+                    <h3>Store Locations</h3>
+                    <p>New York • London • Paris</p>
+                    <p>Tokyo • Dubai • Hong Kong</p>
+                </div>
+            </div>
+            <div class="contact-form">
+                <h3>Send Us a Message</h3>
+                <form>
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Shipping Policy Page -->
+    <section class="policy-page" id="shipping-policy">
+        <h2>Shipping Policy</h2>
+        <p>At Regal Time, we ensure your luxury timepieces are delivered with the utmost care and security.</p>
+        
+        <h3>Domestic Shipping</h3>
+        <ul>
+            <li>Standard Shipping: 3-5 business days - $15 (Free on orders over $500)</li>
+            <li>Express Shipping: 2 business days - $25</li>
+            <li>Overnight Shipping: 1 business day - $50</li>
+        </ul>
+        
+        <h3>International Shipping</h3>
+        <ul>
+            <li>Standard International: 7-14 business days - $50</li>
+            <li>Express International: 3-5 business days - $100</li>
+        </ul>
+        
+        <h3>Processing Time</h3>
+        <p>All orders are processed within 1-2 business days. Orders placed on weekends or holidays will be processed the next business day.</p>
+        
+        <h3>Shipping Restrictions</h3>
+        <p>Due to the high value of our products, we require signature confirmation for all deliveries. We ship to most countries but may be restricted in some regions due to customs regulations.</p>
+        
+        <h3>Tracking Your Order</h3>
+        <p>You will receive a tracking number via email once your order ships. For luxury watches, we provide additional insurance and special handling.</p>
+    </section>
+
+    <!-- Return Policy Page -->
+    <section class="policy-page" id="return-policy">
+        <h2>Return Policy</h2>
+        <p>We want you to be completely satisfied with your Regal Time purchase.</p>
+        
+        <h3>Return Period</h3>
+        <p>You may return unworn, undamaged watches within 14 days of delivery for a full refund or exchange.</p>
+        
+        <h3>Return Process</h3>
+        <ol>
+            <li>Contact our customer service to initiate a return</li>
+            <li>We'll provide a prepaid return shipping label</li>
+            <li>Package the watch securely in its original packaging</li>
+            <li>Include all original paperwork and accessories</li>
+            <li>Ship the package using our provided label</li>
+        </ol>
+        
+        <h3>Refund Processing</h3>
+        <p>Refunds will be processed within 3-5 business days after we receive and inspect the returned item. The refund will be issued to the original payment method.</p>
+        
+        <h3>Exchanges</h3>
+        <p>For exchanges, please contact our customer service team. We'll guide you through the process and ensure you receive your desired timepiece promptly.</p>
+        
+        <h3>Non-Returnable Items</h3>
+        <p>Personalized or engraved watches cannot be returned unless defective. All sales of vintage and limited edition pieces are final.</p>
+    </section>
+
+    <!-- FAQ Page -->
+    <section class="faq-page">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        
+        <div class="faq-item">
+            <div class="faq-question">How do I know my watch is authentic?</div>
+            <div class="faq-answer">
+                <p>All watches sold by Regal Time come with a certificate of authenticity and full manufacturer's warranty. We source directly from authorized dealers and brands to guarantee authenticity.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">What payment methods do you accept?</div>
+            <div class="faq-answer">
+                <p>We accept all major credit cards (Visa, MasterCard, American Express), PayPal, bank transfers, and Regal Time gift cards.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">Do you offer international warranty?</div>
+            <div class="faq-answer">
+                <p>Yes, most of our watches come with international manufacturer's warranty. Please check the specific product page for warranty details.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">How often should I service my watch?</div>
+            <div class="faq-answer">
+                <p>Mechanical watches should be serviced every 3-5 years, while quartz watches should be serviced every 5-7 years. Our customer service can help schedule maintenance.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">Can I get my watch engraved?</div>
+            <div class="faq-answer">
+                <p>Yes, we offer complimentary engraving on most models. Please contact us before placing your order to arrange this service.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">Do you offer gift wrapping?</div>
+            <div class="faq-answer">
+                <p>Yes, we provide premium gift wrapping at no additional cost. You can select this option during checkout.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Regal Time</h3>
+                <p>"Where Every Second is a Masterpiece"</p>
+                <p>Founded in 2023 with a passion for horology and timeless design.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#" class="nav-link" data-page="home">Home</a></li>
+                    <li><a href="#" class="nav-link" data-page="brands">Brands</a></li>
+                    <li><a href="#" class="nav-link" data-page="contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Customer Service</h3>
+                <ul>
+                    <li><a href="#" class="nav-link" data-page="shipping">Shipping Policy</a></li>
+                    <li><a href="#" class="nav-link" data-page="returns">Return Policy</a></li>
+                    <li><a href="#" class="nav-link" data-page="faq">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Connect With Us</h3>
+                <div class="social-icons">
+                    <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/124/124010.png" alt="Facebook"></a>
+                    <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram"></a>
+                    <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Twitter"></a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2023 Regal Time. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Drawer Menu Functionality
+        const menuBtn = document.querySelector('.menu-btn');
+        const closeBtn = document.querySelector('.close-btn');
+        const drawer = document.querySelector('.drawer');
+        const overlay = document.querySelector('.overlay');
+        const submenus = document.querySelectorAll('.has-submenu');
+
+        menuBtn.addEventListener('click', () => {
+            drawer.classList.add('open');
+            overlay.classList.add('active');
+        });
+
+        closeBtn.addEventListener('click', () => {
+            drawer.classList.remove('open');
+            overlay.classList.remove('active');
+        });
+
+        overlay.addEventListener('click', () => {
+            drawer.classList.remove('open');
+            overlay.classList.remove('active');
+        });
+
+        // Submenu functionality
+        submenus.forEach(item => {
+            item.addEventListener('click', function(e) {
+                if (e.target.classList.contains('nav-link')) {
+                    e.preventDefault();
+                    const submenu = this.querySelector('.sub-category');
+                    submenu.classList.toggle('active');
+                    this.classList.toggle('active');
+                }
+            });
+        });
+
+        // Hero text animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const heroContent = document.querySelector('.hero-content');
+            setTimeout(() => {
+                heroContent.classList.add('active');
+            }, 300);
+        });
+
+        // FAQ functionality
+        const faqQuestions = document.querySelectorAll('.faq-question');
+        faqQuestions.forEach(question => {
+            question.addEventListener('click', function() {
+                const answer = this.nextElementSibling;
+                answer.classList.toggle('active');
+                this.classList.toggle('active');
+            });
+        });
+
+        // Simple SPA Navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show home page by default
+            showPage('home');
+            
+            // Set up navigation
+            const navLinks = document.querySelectorAll('.nav-link:not(.has-submenu > a)');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = this.getAttribute('data-page');
+                    showPage(page);
+                    drawer.classList.remove('open');
+                    overlay.classList.remove('active');
+                });
+            });
+            
+            // Cart functionality
+            let cartCount = 0;
+            const cartCountElement = document.getElementById('cart-count');
+            const addToCartButtons = document.querySelectorAll('.add-to-cart');
+            
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    cartCount++;
+                    updateCartCount();
+                    alert('Item added to cart!');
+                });
+            });
+            
+            function updateCartCount() {
+                cartCountElement.textContent = cartCount;
+            }
+            
+            // Page navigation function
+            function showPage(page) {
+                // Hide all pages
+                document.querySelectorAll('main, section[id$="-page"], section.policy-page, section.faq-page').forEach(section => {
+                    section.style.display = 'none';
+                });
+                
+                // Show selected page
+                if (page === 'home') {
+                    document.querySelector('.collections').style.display = 'block';
+                    document.querySelector('.products').style.display = 'block';
+                    window.scrollTo(0, 0);
+                } else if (page === 'brands') {
+                    document.querySelector('.brands-page').style.display = 'block';
+                    window.scrollTo(0, 0);
+                } else if (page === 'contact') {
+                    document.querySelector('.contact-page').style.display = 'block';
+                    window.scrollTo(0, 0);
+                } else if (page === 'shipping') {
+                    document.getElementById('shipping-policy').style.display = 'block';
+                    window.scrollTo(0, 0);
+                } else if (page === 'returns') {
+                    document.getElementById('return-policy').style.display = 'block';
+                    window.scrollTo(0, 0);
+                } else if (page === 'faq') {
+                    document.querySelector('.faq-page').style.display = 'block';
+                    window.scrollTo(0, 0);
+                } else if (page === 'cart') {
+                    alert('Cart page would show here in a complete implementation');
+                } else {
+                    // For other pages, scroll to relevant sections
+                    const targetSection = document.querySelector(`.${page}-collection`);
+                    if (targetSection) {
+                        targetSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
